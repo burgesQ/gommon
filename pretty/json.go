@@ -23,8 +23,8 @@ const (
 )
 
 type (
-
-	// JSON implement blablabla
+	// JSON implement the metadata used to preocess an entry
+	// FIXME: maligned
 	JSON struct {
 		input  io.Reader
 		output *bufio.Writer
@@ -33,24 +33,9 @@ type (
 		err    error
 		comp   bool
 	}
-
-	// JsonError struct {
-	// 	e       error
-	// 	context string
-	// }
 )
 
-// func (e JsonError) Error() string {
-// 	return e.context + ": " + e.e.Error()
-// }
-
-// func NewJSONErr(e error) {
-// 	if e != nil {
-// 		panic(JsonError{e, "cannot write to output"})
-// 	}
-// }
-
-// Use the pretty json utilitary to create well, pretty json ? :nerd_face:
+// SimplePrettyJSON use the pretty json utilitary to create well, pretty json ? :nerd_face:
 func SimplePrettyJSON(r io.Reader, pretty bool) (string, error) {
 	var (
 		o  = new(bytes.Buffer)

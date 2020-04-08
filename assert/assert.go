@@ -6,12 +6,15 @@ import (
 )
 
 const (
-	STRING = 1
-	INT    = 2
+	// Assertion varible type to be perfome
+	String VariableType = iota
+	Int
 
 	_notEqual = "assertion failed\ngot :\t>[\t%v\t]<\nwant :\t>[\t%v\t]<"
 	_flagType = "STRING = 1 - INT = 2"
 )
+
+type VariableType int
 
 func assert(t *testing.T, method func() bool,
 	context string, args ...interface{}) {
@@ -25,23 +28,29 @@ func assert(t *testing.T, method func() bool,
 	}
 }
 
+// SimpleEqualContext assert that have and want are equal and output the
+// formated context args as error message
 func SimpleEqualContext(t *testing.T, have, want interface{},
 	context string, args ...interface{}) {
 	t.Helper()
 	assert(t, func() bool { return have == want }, context, args...)
 }
 
+// SimpleNotEqualContext assert that have and want are not equal and output the
+// formated context args as error message
 func SimpleNotEqualContext(t *testing.T, have, want interface{},
 	context string, args ...interface{}) {
 	t.Helper()
 	assert(t, func() bool { return have != want }, context, args...)
 }
 
+// SimpleEqualContext assert that have and want are equal
 func SimpleEqual(t *testing.T, have, want interface{}) {
 	t.Helper()
 	SimpleEqualContext(t, have, want, _notEqual, have, want)
 }
 
+// SimpleNotEqualContext assert that have and want are not equal
 func SimpleNotEqual(t *testing.T, have, want interface{}) {
 	t.Helper()
 	SimpleNotEqualContext(t, have, want, _notEqual, have, want)
@@ -151,17 +160,17 @@ func MapOfStringEqual(t *testing.T, have, want map[string]string) {
 }
 
 // Is assert the type of have
-func Is(t *testing.T, have interface{}, what int) {
+func Is(t *testing.T, have interface{}, what VariableType) {
 	t.Helper()
 	var (
 		fmt = ""
 		ok  = false
 	)
 	switch what {
-	case STRING:
+	case String:
 		_, ok = have.(string)
 		fmt = "%s is not a string (%T)"
-	case INT:
+	case Int:
 		_, ok = have.(int)
 		fmt = "%s is not a int (%T)"
 	default:
@@ -173,15 +182,16 @@ func Is(t *testing.T, have interface{}, what int) {
 // IsString assert that have is a string
 func IsString(t *testing.T, have interface{}) {
 	t.Helper()
-	Is(t, have, STRING)
+	Is(t, have, String)
 }
 
 // IsInt assert that have in as int
 func IsInt(t *testing.T, have interface{}) {
 	t.Helper()
-	Is(t, have, INT)
+	Is(t, have, Int)
 }
 
+// Lower assert that have is lower than want
 // 0 - 0 -- false
 // 1 - 0 -- false
 // 0 - 1 -- true
@@ -190,6 +200,7 @@ func Lower(t *testing.T, have, want int) {
 	assert(t, func() bool { return have < want }, "%d is greater than %d ", have, want)
 }
 
+// EuqalOrGreater assert that have is lower than want
 // 0 - 0 -- true
 // 1 - 0 -- true
 // 0 - 1 -- false
@@ -198,7 +209,7 @@ func EqualOrGreater(t *testing.T, have, want int) {
 	assert(t, func() bool { return have >= want }, "%d is strictly lower than %d ", have, want)
 }
 
-// SliceByteEqual
+// SliceByteEqual assert that the have and want slice of byte are equal
 func SliceByteEqual(t *testing.T, have, want []byte) {
 	t.Helper()
 	TrueContext(t, func() bool {
@@ -206,8 +217,8 @@ func SliceByteEqual(t *testing.T, have, want []byte) {
 	}(), _notEqual, have, want)
 }
 
-// SliceEqual
-func SliceEqual(t *testing.T, have, want interface{}) {
+// SliceEqual assert that the have and want slice of byte are equal
+func SliceEqual(t *testing.T, have, want []interface{}) {
 	t.Helper()
 	TrueContext(t, func() bool {
 		return reflect.DeepEqual(have, want)

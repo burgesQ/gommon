@@ -2,7 +2,11 @@
 #+AUTHOR: Quentin Burgess (quentin.burgess@frafos.com)
 #+DESCRIPTION: Quick summary of gommon's todos
 
-* WIP v1 [0/3] [0%]
-** TODO proper doc
-** TODO add CI
-** TODO proper code coverage
+* WIP v1 [2/3] [66%]
+** WIP proper doc [1/2] [50%]
+   - [X] exported is commented
+   - [ ] add example
+** DONE add CI
+   CLOSED: [2020-04-08 Wed 12:34]
+** DONE proper code coverage
+   CLOSED: [2020-04-08 Wed 12:34]
