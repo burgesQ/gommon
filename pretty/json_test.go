@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	z "github.com/burgesQ/gommon/testing"
+	"github.com/burgesQ/gommon/assert"
 )
 
 const (
@@ -67,11 +67,11 @@ func TestSimplePrettyJSON(t *testing.T) {
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
 			out, e := SimplePrettyJSON(strings.NewReader(test.input), test.pretty)
-			z.AssertEqual(t, out, test.expected)
+			assert.Equal(t, out, test.expected)
 			if test.errorExpected {
-				z.AssertNotNil(t, e)
+				assert.NotNil(t, e)
 			} else {
-				z.AssertNil(t, e)
+				assert.Nil(t, e)
 			}
 		})
 	}

@@ -1,4 +1,4 @@
-package testing
+package assert
 
 import (
 	"bytes"
@@ -12,24 +12,24 @@ type (
 	HandlerForTest = func(t *testing.T, resp *http.Response)
 )
 
-// AssertBody fetch and assert the content of an http.Response
-func AssertBody(t *testing.T, resp *http.Response, expected string) {
+// Body fetch and assert the content of an http.Response
+func Body(t *testing.T, resp *http.Response, expected string) {
 	t.Helper()
-	AssertStringEqual(t, fetchBody(t, resp), expected)
+	StringEqual(t, fetchBody(t, resp), expected)
 }
 
-func AssertBodyDiffere(t *testing.T, resp *http.Response, expected string) {
+func BodyDiffere(t *testing.T, resp *http.Response, expected string) {
 	t.Helper()
-	AssertStringNotEqual(t, fetchBody(t, resp), expected)
+	StringNotEqual(t, fetchBody(t, resp), expected)
 }
 
-// AssertStatusCode assert the status code of the response
-func AssertStatusCode(t *testing.T, resp *http.Response, expected int) {
+// StatusCode assert the status code of the response
+func StatusCode(t *testing.T, resp *http.Response, expected int) {
 	t.Helper()
-	AssertIntEqual(t, resp.StatusCode, expected)
+	IntEqual(t, resp.StatusCode, expected)
 }
 
-func AssertHeader(t *testing.T, resp *http.Response, key, val string) bool {
+func Header(t *testing.T, resp *http.Response, key, val string) bool {
 	// test existence
 	if out, ok := resp.Header[key]; !ok || len(out) == 0 || out[0] != val {
 		t.Errorf("Invalid response header [%s] expected: [%s]", out[0], val)
