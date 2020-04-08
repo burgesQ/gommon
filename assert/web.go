@@ -12,12 +12,13 @@ type (
 	HandlerForTest = func(t *testing.T, resp *http.Response)
 )
 
-// Body fetch and assert the content of an http.Response
+// Body fetch and assert that the body of the http.Response is the same than expected
 func Body(t *testing.T, resp *http.Response, expected string) {
 	t.Helper()
 	StringEqual(t, fetchBody(t, resp), expected)
 }
 
+// BodyDiffere fetch and assert that the body of the http.Response differ than expected
 func BodyDiffere(t *testing.T, resp *http.Response, expected string) {
 	t.Helper()
 	StringNotEqual(t, fetchBody(t, resp), expected)
@@ -29,6 +30,7 @@ func StatusCode(t *testing.T, resp *http.Response, expected int) {
 	IntEqual(t, resp.StatusCode, expected)
 }
 
+// Header assert value of the given header key:vak in the htt.Response param
 func Header(t *testing.T, resp *http.Response, key, val string) bool {
 	// test existence
 	if out, ok := resp.Header[key]; !ok || len(out) == 0 || out[0] != val {
