@@ -1,0 +1,8 @@
+#+TITLE: gommon todo's
+#+AUTHOR: Quentin Burgess (quentin.burgess@frafos.com)
+#+DESCRIPTION: Quick summary of gommon's todos
+
+* WIP v1 [0/3] [0%]
+** TODO proper doc
+** TODO add CI
+** TODO proper code coverage
