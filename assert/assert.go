@@ -217,6 +217,14 @@ func SliceByteEqual(t *testing.T, have, want []byte) {
 	}(), _notEqual, have, want)
 }
 
+// SliceByteEqual assert that the have and want slice of byte are equal
+func SliceU16Equal(t *testing.T, have, want []uint16) {
+	t.Helper()
+	TrueContext(t, func() bool {
+		return reflect.DeepEqual(have, want)
+	}(), _notEqual, have, want)
+}
+
 // SliceEqual assert that the have and want slice of byte are equal
 func SliceEqual(t *testing.T, have, want []interface{}) {
 	t.Helper()
