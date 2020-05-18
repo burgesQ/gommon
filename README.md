@@ -7,8 +7,18 @@
 [![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](https://raw.githubusercontent.com/burgesQ/gommon/master/LICENSE)
 [![Version compatibility with Go 1.13 onward using modules](https://img.shields.io/badge/compatible%20with-go1.13+-5272b4.svg)](https://github.com/burgesQ/gommon#run)
 
-common go modules
+## What
 
-## Run
+publuc gommon go modules. Credits to Frafos GmbH.
 
-`go get github.com/burgesQ/gommon`
+
+
+## Use it
+
+Import `github.com/burgesQ/gommon`.
+
+### Important 
+
+Go 1.13 is required. Make sure the environment variable `GO111MODULE` is set to on when running the install command.
+
+ 
