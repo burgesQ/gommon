@@ -232,3 +232,10 @@ func SliceEqual(t *testing.T, have, want []interface{}) {
 		return reflect.DeepEqual(have, want)
 	}(), _notEqual, have, want)
 }
+
+func SliceOfStringMap(t *testing.T, have, want []map[string]string) {
+	t.Helper()
+	TrueContext(t, func() bool {
+		return reflect.DeepEqual(have, want)
+	}(), _notEqual, have, want)
+}
