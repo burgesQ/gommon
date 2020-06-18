@@ -1,6 +1,7 @@
 package assert
 
 import (
+	"errors"
 	"reflect"
 	"testing"
 )
@@ -238,4 +239,10 @@ func SliceOfStringMap(t *testing.T, have, want []map[string]string) {
 	TrueContext(t, func() bool {
 		return reflect.DeepEqual(have, want)
 	}(), _notEqual, have, want)
+}
+
+func ErrorIs(t *testing.T, e, what error) {
+	t.Helper()
+
+	TrueContext(t, errors.Is(e, what), "errors %T isn't %T", e, what)
 }
