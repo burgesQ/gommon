@@ -41,6 +41,13 @@ func Header(t *testing.T, resp *http.Response, key, val string) bool {
 	return true
 }
 
+func DeleteAndTestAPI(t *testing.T, url string, handler HandlerForTest) {
+	t.Helper()
+	var resp = deleteAPI(t, url)
+	defer resp.Body.Close()
+	handler(t, resp)
+}
+
 // RequestAndTestAPI request an API then run the test handler
 func RequestAndTestAPI(t *testing.T, url string, handler HandlerForTest) {
 	t.Helper()
@@ -71,6 +78,27 @@ func requestAPI(t *testing.T, url string) *http.Response {
 	var resp, err = http.Get(url)
 	if err != nil {
 		t.Fatalf("error requesting the api : %s", err.Error())
+	}
+
+	return resp
+}
+
+func deleteAPI(t *testing.T, url string) *http.Response {
+	// create client
+	client := &http.Client{}
+
+	// create request
+	req, err := http.NewRequest("DELETE", url, nil)
+	if err != nil {
+		t.Fatalf("error creating the  api request : %s", err.Error())
+		return nil
+	}
+
+	// fetch the response
+	resp, err := client.Do(req)
+	if err != nil {
+		t.Fatalf("error requesting the api : %s", err.Error())
+		return nil
 	}
 
 	return resp
