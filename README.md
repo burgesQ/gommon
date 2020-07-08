@@ -9,9 +9,7 @@
 
 ## What
 
-publuc gommon go modules. Credits to Frafos GmbH.
-
-
+public gommon go modules. Credit to Frafos GmbH.
 
 ## Use it
 
