@@ -32,10 +32,24 @@ func StatusCode(t *testing.T, resp *http.Response, expected int) {
 
 // Header assert value of the given header key:vak in the htt.Response param
 func Header(t *testing.T, resp *http.Response, key, val string) bool {
+	t.Helper()
 	// test existence
 	if out, ok := resp.Header[key]; !ok || len(out) == 0 || out[0] != val {
-		t.Errorf("Invalid response header [%s] expected: [%s]", out[0], val)
+		t.Errorf("assertion failed for the %q header\ngot :\t>[\t%v\t]<\nwant :\t>[\t%v\t]<", key, out, val)
 		return false
+	}
+
+	return true
+}
+
+// Header assert value of the given header key:vak in the htt.Response param
+func Headers(t *testing.T, resp *http.Response, kv ...[2]string) bool {
+	t.Helper()
+	for i := range kv {
+		k, v := kv[i][0], kv[i][1]
+		if !Header(t, resp, k, v) {
+			return false
+		}
 	}
 
 	return true
