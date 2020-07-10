@@ -35,7 +35,8 @@ func Header(t *testing.T, resp *http.Response, key, val string) bool {
 	t.Helper()
 	// test existence
 	if out, ok := resp.Header[key]; !ok || len(out) == 0 || out[0] != val {
-		t.Errorf("assertion failed for the %q header\ngot :\t>[\t%v\t]<\nwant :\t>[\t%v\t]<", key, out, val)
+		t.Errorf("assertion failed for the %q header", key)
+		NotEqual(t, out, val)
 		return false
 	}
 
