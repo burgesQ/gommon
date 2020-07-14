@@ -1,11 +1,17 @@
+// assert package hold common function wrapping the
+// testing.T object to perfome various assertion.
+// The assert pacakge need no init, and  outputed are colored.
+// To disable the colored output, set the `GOTESTNOCOLOR` env var to any value
+// other than nothing
 package assert
 
 import (
 	"errors"
+	"os"
 	"reflect"
 	"testing"
 
-	. "github.com/logrusorgru/aurora"
+	"github.com/logrusorgru/aurora"
 )
 
 const (
@@ -20,8 +26,12 @@ const (
 )
 
 var (
-	_notEqual = Sprintf("\n\t[%s] :\t> %%v <\t\n\t[%s] :\t> %%v <\t\n",
-		Bold(Red("✗")), Bold(Green("✓")))
+	// fetch env value
+	disableColorVal, disableColor = os.LookupEnv("GOTESTNOCOLOR")
+	colorEnable                   = (!disableColor || (disableColor && disableColorVal == ""))
+	au                            = aurora.NewAurora(colorEnable)
+	_notEqual                     = Sprintf("\n\t[%s] :\t> %%v <\t\n\t[%s] :\t> %%v <\t\n",
+		au.Bold(Red("✗")), au.Bold(Green("✓")))
 )
 
 type VariableType int
@@ -30,15 +40,15 @@ func assert(t *testing.T, method func() bool, context string, args ...interface{
 	t.Helper()
 
 	if method() {
-		t.Log(Green(_success))
+		t.Log(au.Green(_success))
 		return
 	}
 
-	t.Log(Bold(Red(_fail)))
+	t.Log(au.Bold(au.Red(_fail)))
 
 	switch {
 	case len(args) == 2 && context == _notEqual:
-		t.Errorf(context, Bold(Yellow(args[0])), Bold(Green(args[1])))
+		t.Errorf(context, au.Bold(Yellow(args[0])), au.Bold(Green(args[1])))
 	case len(args) > 0:
 		t.Errorf(context, args...)
 	default:
@@ -62,13 +72,13 @@ func SimpleNotEqualContext(t *testing.T, have, want interface{},
 	assert(t, func() bool { return have != want }, context, args...)
 }
 
-// SimpleEqualContext assert that have and want are equal
+// SimpleEqual assert that have and want are equal
 func SimpleEqual(t *testing.T, have, want interface{}) {
 	t.Helper()
 	SimpleEqualContext(t, have, want, _notEqual, have, want)
 }
 
-// SimpleNotEqualContext assert that have and want are not equal
+// SimpleNotEqual assert that have and want are not equal
 func SimpleNotEqual(t *testing.T, have, want interface{}) {
 	t.Helper()
 	SimpleNotEqualContext(t, have, want, _notEqual, have, want)
@@ -235,7 +245,7 @@ func SliceByteEqual(t *testing.T, have, want []byte) {
 	}(), _notEqual, have, want)
 }
 
-// SliceByteEqual assert that the have and want slice of byte are equal
+// SliceByteU16Equal assert that the have and want slice of byte are equal
 func SliceU16Equal(t *testing.T, have, want []uint16) {
 	t.Helper()
 	TrueContext(t, func() bool {
@@ -251,6 +261,7 @@ func SliceEqual(t *testing.T, have, want []interface{}) {
 	}(), _notEqual, have, want)
 }
 
+// SliceOfStringMap assert that the slice have the same values
 func SliceOfStringMap(t *testing.T, have, want []map[string]string) {
 	t.Helper()
 	TrueContext(t, func() bool {
@@ -258,6 +269,7 @@ func SliceOfStringMap(t *testing.T, have, want []map[string]string) {
 	}(), _notEqual, have, want)
 }
 
+// ErrorIs assert that an error belong to an error type
 func ErrorIs(t *testing.T, e, what error) {
 	t.Helper()
 
