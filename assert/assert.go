@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"gopkg.in/gookit/color.v1"
+	. "github.com/logrusorgru/aurora"
 )
 
 const (
@@ -13,17 +13,15 @@ const (
 	String VariableType = iota
 	Int
 
-	_notEqual     = "not equal: %s - %s"
-	_notEqualGot  = "\t[✗] :\t> %v <\t\n"
-	_notEqualWant = "\t[✓] :\t> %v <\t\n"
-
 	_success = "\t\t\t\t ✓"
 	_fail    = "\t\t\t\t ✗"
 
 	_flagType = "STRING = 1 - INT = 2"
+)
 
-	_loggerGot  = color.FgYellow
-	_loggerWant = color.FgGreen
+var (
+	_notEqual = Sprintf("\n\t[%s] :\t> %%v <\t\n\t[%s] :\t> %%v <\t\n",
+		Bold(Red("✗")), Bold(Green("✓")))
 )
 
 type VariableType int
@@ -31,27 +29,19 @@ type VariableType int
 func assert(t *testing.T, method func() bool, context string, args ...interface{}) {
 	t.Helper()
 
-	color.Set(color.FgGreen)
-	defer color.Reset()
-
 	if method() {
-		t.Log(_success)
+		t.Log(Green(_success))
 		return
 	}
 
-	color.Set(color.FgRed)
-	t.Log(_fail)
+	t.Log(Bold(Red(_fail)))
 
 	switch {
-	case len(args) > 0 && context == _notEqual:
-		_loggerGot.Printf(_notEqualGot, args[0])
-		_loggerWant.Printf(_notEqualWant, args[1])
-		t.Errorf("")
+	case len(args) == 2 && context == _notEqual:
+		t.Errorf(context, Bold(Yellow(args[0])), Bold(Green(args[1])))
 	case len(args) > 0:
-		color.Set(color.FgRed)
 		t.Errorf(context, args...)
 	default:
-		color.Set(color.FgRed)
 		t.Errorf(context)
 	}
 }
