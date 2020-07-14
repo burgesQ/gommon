@@ -30,8 +30,8 @@ var (
 	disableColorVal, disableColor = os.LookupEnv("GOTESTNOCOLOR")
 	colorEnable                   = (!disableColor || (disableColor && disableColorVal == ""))
 	au                            = aurora.NewAurora(colorEnable)
-	_notEqual                     = Sprintf("\n\t[%s] :\t> %%v <\t\n\t[%s] :\t> %%v <\t\n",
-		au.Bold(Red("✗")), au.Bold(Green("✓")))
+	_notEqual                     = au.Sprintf("\n\t[%s] :\t> %%v <\t\n\t[%s] :\t> %%v <\t\n",
+		au.Bold(au.Red("✗")), au.Bold(au.Green("✓")))
 )
 
 type VariableType int
@@ -48,7 +48,7 @@ func assert(t *testing.T, method func() bool, context string, args ...interface{
 
 	switch {
 	case len(args) == 2 && context == _notEqual:
-		t.Errorf(context, au.Bold(Yellow(args[0])), au.Bold(Green(args[1])))
+		t.Errorf(context, au.Bold(au.Yellow(args[0])), au.Bold(au.Green(args[1])))
 	case len(args) > 0:
 		t.Errorf(context, args...)
 	default:
