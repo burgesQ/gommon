@@ -9,14 +9,34 @@
 
 ## What
 
-public gommon go modules. Credit to Frafos GmbH.
+Public go modules. Credit to Frafos GmbH.
 
 ## Use it
 
 Import `github.com/burgesQ/gommon`.
 
+| **package** | *description*                        |
+| :-          | :-                                   |
+| `assert`    | Colored assertion package            |
+| `log`       | Dummy log interface & implementation |
+| `pretty`    | Format and validate  json            |
+
 ### Important 
 
-Go 1.13 is required. Make sure the environment variable `GO111MODULE` is set to on when running the install command.
+Go `1.13` is required
 
- 
+## Test
+
+Simply run `make test`
+
+## Contributing
+
+If you find any typo/misconfiguration/... please send me a PR or open an issue. 
+
+Also, while creating your Pull Request on GitHub, please write a description which gives the context and/or explains why you are creating it.
+
+## Credit
+
+To Frafos GmbH :tada: where I've writted most of that code.
+
+Credit to Raph ([@raphaelcoeffic](https://github.com/raphaelcoeffic)) for the `pretty` package.

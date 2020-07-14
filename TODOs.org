@@ -6,6 +6,9 @@
 ** WIP proper doc [1/2] [50%]
    - [X] exported is commented
    - [ ] add example
+** WIP colored assertion
+   Shouldn't output some ugly stuff in tty
+   https://github.com/logrusorgru/aurora ?
 ** TODO enhancement of the log package
    - use Writer to output (allow testing)
    - add file/line
