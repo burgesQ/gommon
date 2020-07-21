@@ -104,6 +104,13 @@ func NotEqual(t *testing.T, have, want interface{}) {
 	SimpleNotEqual(t, have, want)
 }
 
+// NotEqual run an assertion that the argument are not equal
+func NotEqualContext(t *testing.T, have, want interface{},
+	context string, args ...interface{}) {
+	t.Helper()
+	SimpleNotEqualContext(t, have, want, context, args...)
+}
+
 // NotNil run an assertion that the argument is not nil
 func NotNil(t *testing.T, have interface{}) {
 	t.Helper()

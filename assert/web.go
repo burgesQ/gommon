@@ -12,6 +12,11 @@ type (
 	HandlerForTest = func(t *testing.T, resp *http.Response)
 )
 
+var (
+	_notEqualHeader = au.Sprintf("assertion failed for the %%q header\n\t[%s] :\t> %%v <\t\n\t[%s] :\t> %%v <\t\n",
+		au.Bold(au.Red("✗")), au.Bold(au.Green("✓")))
+)
+
 // Body fetch and assert that the body of the http.Response is the same than expected
 func Body(t *testing.T, resp *http.Response, expected string) {
 	t.Helper()
@@ -35,8 +40,7 @@ func Header(t *testing.T, resp *http.Response, key, val string) bool {
 	t.Helper()
 	// test existence
 	if out, ok := resp.Header[key]; !ok || len(out) == 0 || out[0] != val {
-		t.Errorf("assertion failed for the %q header", au.Bold(au.Yellow(key)))
-		NotEqual(t, out, val)
+		EqualContext(t, out, val, _notEqualHeader, au.Bold(au.Yellow(key)), out[0], val)
 		return false
 	}
 
