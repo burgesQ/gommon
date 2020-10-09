@@ -172,6 +172,12 @@ func UInt16Equal(t *testing.T, have, want uint16) {
 	SimpleEqual(t, have, want)
 }
 
+// Int64Equal run an assertion that the two string arguments are equal
+func Int64Equal(t *testing.T, have, want int64) {
+	t.Helper()
+	SimpleEqual(t, have, want)
+}
+
 // IntNotEqual run an assertion that the two string arguments are not equal
 func IntNotEqual(t *testing.T, have, want int) {
 	t.Helper()
