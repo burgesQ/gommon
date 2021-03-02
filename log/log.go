@@ -19,6 +19,7 @@ const (
 type (
 	// Log interface implement the logging system inside the API
 	Log interface {
+		Printf(format string, args ...interface{})
 		Errorf(format string, v ...interface{})
 		Warnf(format string, v ...interface{})
 		Infof(format string, v ...interface{})
@@ -73,6 +74,10 @@ func (l logger) GetErrorLogger() *log.Logger {
 
 func (l logger) SetLogLevel(level Level) bool {
 	return SetLogLevel(level)
+}
+
+func (l logger) Printf(format string, v ...interface{}) {
+	l.logContent(LogERR, format, v...)
 }
 
 func (l logger) Debugf(format string, v ...interface{}) {
