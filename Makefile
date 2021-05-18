@@ -8,7 +8,7 @@ TEST_COVER	= $(COVER_VALUE)
 TEST_ARGS		= -v -short
 TEST_FILTER = #-run <pattern>
 app_name = github.com/burgesQ/$(NAME)
-TEST_FILES	= $(app_name)/pretty
+TEST_FILES	= ./...
 
 TEST				= $(GO_CC) test $(TEST_COVER) $(TEST_ARGS) $(TEST_FILES) $(TEST_FILTER)
 LINT				= golangci-lint run

@@ -21,25 +21,30 @@ const (
 )
 
 // Body fetch and assert that the body of the http.Response is the same than expected
-func Body(t *testing.T, resp *http.Response, expected string) {
+func Body(t *testing.T, expected string, resp *http.Response) {
 	t.Helper()
 	require.Equal(t, expected, fetchBody(t, resp))
 }
 
+func BodyContain(t *testing.T, expected string, resp *http.Response) {
+	t.Helper()
+	require.Contains(t, fetchBody(t, resp), expected)
+}
+
 // BodyDiffere fetch and assert that the body of the http.Response differ than expected
-func BodyDiffere(t *testing.T, resp *http.Response, expected string) {
+func BodyDiffere(t *testing.T, expected string, resp *http.Response) {
 	t.Helper()
 	require.NotEqual(t, expected, fetchBody(t, resp))
 }
 
 // StatusCode assert the status code of the response
-func StatusCode(t *testing.T, resp *http.Response, expected int) {
+func StatusCode(t *testing.T, expected int, resp *http.Response) {
 	t.Helper()
 	require.Equal(t, expected, resp.StatusCode)
 }
 
 // Header assert value of the given header key:vak in the htt.Response param
-func Header(t *testing.T, resp *http.Response, key, val string) bool {
+func Header(t *testing.T, key, val string, resp *http.Response) bool {
 	t.Helper()
 	// test existence
 	if out, ok := resp.Header[key]; !ok || len(out) == 0 || out[0] != val {
@@ -56,7 +61,7 @@ func Headers(t *testing.T, resp *http.Response, kv ...[2]string) bool {
 
 	for i := range kv {
 		k, v := kv[i][0], kv[i][1]
-		if !Header(t, resp, k, v) {
+		if !Header(t, k, v, resp) {
 			return false
 		}
 	}
