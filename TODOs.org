@@ -2,14 +2,22 @@
 #+AUTHOR: Quentin Burgess (quentin.burgess@frafos.com)
 #+DESCRIPTION: Quick summary of gommon's todos
 
-* WIP v1 [2/4] [50%]
-** WIP proper doc [1/2] [50%]
+* WIP v1.2 [1/1] [100%]
+** DONE webtest package
+CLOSED: [2021-05-18 Tue 16:13]
+
+* DONE v1 [5/5] [100%]
+CLOSED: [2021-05-18 Tue 16:13]
+** CANCELED proper doc [1/2] [50%]
+CLOSED: [2021-05-18 Tue 16:13]
    - [X] exported is commented
    - [ ] add example
-** WIP colored assertion
+** DONE colored assertion
+CLOSED: [2021-05-18 Tue 16:13]
    Shouldn't output some ugly stuff in tty
    https://github.com/logrusorgru/aurora ?
-** TODO enhancement of the log package
+** DONE enhancement of the log package
+CLOSED: [2021-05-18 Tue 16:13]
    - use Writer to output (allow testing)
    - add file/line
 

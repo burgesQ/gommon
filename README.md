@@ -9,34 +9,30 @@
 
 ## What
 
-Public go modules. Credit to Frafos GmbH.
+some small go modules
 
 ## Use it
 
 Import `github.com/burgesQ/gommon`.
 
-| **package** | *description*                        |
-| :-          | :-                                   |
-| `assert`    | Colored assertion package            |
-| `log`       | Dummy log interface & implementation |
-| `pretty`    | Format and validate  json            |
+| **package** | *description*          |
+| :-          | :-                     |
+| `webtest`   | Run some web assertion |
 
-### Important 
+### Important
 
 Go `1.13` is required
 
 ## Test
 
-Simply run `make test`
+Simply run `make test` (none since v1.2)
 
 ## Contributing
 
-If you find any typo/misconfiguration/... please send me a PR or open an issue. 
+If you find any typo/misconfiguration/... please send me a PR or open an issue.
 
 Also, while creating your Pull Request on GitHub, please write a description which gives the context and/or explains why you are creating it.
 
 ## Credit
 
 To Frafos GmbH :tada: where I've writted most of that code.
-
-Credit to Raph ([@raphaelcoeffic](https://github.com/raphaelcoeffic)) for the `pretty` package.

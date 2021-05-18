@@ -1,2 +1,2 @@
-// Package gommon contain some common go modules. It include the pretty and the assert package.
+// Package gommon contain some common go modules.
 package gommon
