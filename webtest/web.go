@@ -26,7 +26,7 @@ func Body(t *testing.T, expected string, resp *http.Response) {
 	require.Equal(t, expected, fetchBody(t, resp))
 }
 
-func BodyContain(t *testing.T, expected string, resp *http.Response) {
+func BodyContains(t *testing.T, expected string, resp *http.Response) {
 	t.Helper()
 	require.Contains(t, fetchBody(t, resp), expected)
 }
@@ -90,13 +90,17 @@ func RequestAndTestAPI(t *testing.T, url string, handler HandlerForTest) {
 
 // PushAndTestAPI post to an API then run the test handler
 // The sub method try to send an `application/json` encoded content
-func PushAndTestAPI(t *testing.T, path string, content []byte, handler HandlerForTest) {
+func PushAndTestAPI(t *testing.T, path string, content []byte, handler HandlerForTest, headers ...[2]string) {
 	t.Helper()
 
-	var resp = pushAPI(t, path, content)
+	var resp = pushAPI(t, path, content, headers...)
 	defer resp.Body.Close()
 
 	handler(t, resp)
+}
+
+func FetchBody(t *testing.T, resp *http.Response) string {
+	return fetchBody(t, resp)
 }
 
 func fetchBody(t *testing.T, resp *http.Response) string {
@@ -138,7 +142,7 @@ func deleteAPI(t *testing.T, url string) *http.Response {
 	return prepReq(t, url, "DELETE")
 }
 
-func pushAPI(t *testing.T, url string, content []byte) *http.Response {
+func pushAPI(t *testing.T, url string, content []byte, headers ...[2]string) *http.Response {
 	var (
 		client   = &http.Client{}
 		ctx, cl  = context.WithTimeout(context.Background(), time.Second*_ttlTest)
@@ -151,7 +155,13 @@ func pushAPI(t *testing.T, url string, content []byte) *http.Response {
 		t.Fatalf("can't post the new request : %s", err.Error())
 	}
 
-	req.Header.Set("Content-Type", "application/json")
+	if len(headers) == 0 {
+		req.Header.Set("Content-Type", "application/json")
+	} else {
+		for i := range headers {
+			req.Header.Set(headers[i][0], headers[i][1])
+		}
+	}
 
 	resp, err := client.Do(req)
 	if err != nil {
