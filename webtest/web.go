@@ -49,6 +49,7 @@ func Header(t *testing.T, key, val string, resp *http.Response) bool {
 	// test existence
 	if out, ok := resp.Header[key]; !ok || len(out) == 0 || out[0] != val {
 		require.Equalf(t, val, out, _notEqualHeader, key, out[0], val)
+
 		return false
 	}
 
@@ -72,7 +73,7 @@ func Headers(t *testing.T, resp *http.Response, kv ...[2]string) bool {
 func DeleteAndTestAPI(t *testing.T, url string, handler HandlerForTest) {
 	t.Helper()
 
-	var resp = deleteAPI(t, url)
+	resp := deleteAPI(t, url)
 	defer resp.Body.Close()
 
 	handler(t, resp)
@@ -82,7 +83,7 @@ func DeleteAndTestAPI(t *testing.T, url string, handler HandlerForTest) {
 func RequestAndTestAPI(t *testing.T, url string, handler HandlerForTest) {
 	t.Helper()
 
-	var resp = requestAPI(t, url)
+	resp := requestAPI(t, url)
 	defer resp.Body.Close()
 
 	handler(t, resp)
@@ -93,18 +94,22 @@ func RequestAndTestAPI(t *testing.T, url string, handler HandlerForTest) {
 func PushAndTestAPI(t *testing.T, path string, content []byte, handler HandlerForTest, headers ...[2]string) {
 	t.Helper()
 
-	var resp = pushAPI(t, path, content, headers...)
+	resp := pushAPI(t, path, content, headers...)
 	defer resp.Body.Close()
 
 	handler(t, resp)
 }
 
 func FetchBody(t *testing.T, resp *http.Response) string {
+	t.Helper()
+
 	return fetchBody(t, resp)
 }
 
 func fetchBody(t *testing.T, resp *http.Response) string {
-	var tmp, err = ioutil.ReadAll(resp.Body)
+	t.Helper()
+
+	tmp, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatalf("error fetching the body response : %s", err.Error())
 	}
@@ -114,10 +119,12 @@ func fetchBody(t *testing.T, resp *http.Response) string {
 }
 
 func prepReq(t *testing.T, url, method string) *http.Response {
+	t.Helper()
+
 	var (
 		client   = &http.Client{}
 		ctx, cl  = context.WithTimeout(context.Background(), time.Second*_ttlTest)
-		req, err = http.NewRequestWithContext(ctx, method, url, nil)
+		req, err = http.NewRequestWithContext(ctx, method, url, http.NoBody)
 	)
 
 	defer cl()
@@ -135,18 +142,24 @@ func prepReq(t *testing.T, url, method string) *http.Response {
 }
 
 func requestAPI(t *testing.T, url string) *http.Response {
+	t.Helper()
+
 	return prepReq(t, url, "GET")
 }
 
 func deleteAPI(t *testing.T, url string) *http.Response {
+	t.Helper()
+
 	return prepReq(t, url, "DELETE")
 }
 
 func pushAPI(t *testing.T, url string, content []byte, headers ...[2]string) *http.Response {
+	t.Helper()
+
 	var (
 		client   = &http.Client{}
 		ctx, cl  = context.WithTimeout(context.Background(), time.Second*_ttlTest)
-		req, err = http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer(content))
+		req, err = http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewBuffer(content))
 	)
 
 	defer cl()

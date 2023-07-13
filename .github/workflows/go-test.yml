@@ -1,20 +1,21 @@
 name: GoTest
-
-on: [push]
+on:
+  pull_request:
+  push:
+    branches:
+        - master
 
 jobs:
   build:
 
     name: Test
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v1
 
-    - name: Set up Go 1.13
+    - name: Set up Go 1.19
       uses: actions/setup-go@v1
       with:
-        go-version: 1.13
+        go-version: 1.19
       id: go
 
     - name: Check out code into the Go module directory
@@ -23,7 +24,16 @@ jobs:
     - name: Get dependencies
       run: go get -v -t -d ./...
 
-    - name: Test
+    - name: Generate coverage report
       run: |
-        go test ./... -cover -v -short -coverprofile=coverage.out -covermode=atomic
-        bash <(curl -s https://codecov.io/bash) -t 923e0ae9-0759-4907-9391-1dae63ee19c3
+        go test -shuffle=on -coverpkg github.com/burgesQ/gommon/... -coverprofile=cover.cov -covermode=atomic -v -race ./...
+
+    - name: Upload coverage report
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./cover.cov
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
+        verbose: true
