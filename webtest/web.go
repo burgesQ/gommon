@@ -21,14 +21,45 @@ const (
 )
 
 // Body fetch and assert that the body of the http.Response is the same than expected
-func Body(t *testing.T, expected string, resp *http.Response) {
+func Body(t *testing.T, expected string, resp *http.Response, msg ...any) {
 	t.Helper()
-	require.Equal(t, expected, fetchBody(t, resp))
+
+	if len(msg) == 0 {
+		msg = []any{"expected response body differe"}
+	}
+
+	require.Equal(t, expected, fetchBody(t, resp), msg...)
 }
 
-func BodyContains(t *testing.T, expected string, resp *http.Response) {
+// Body fetch and assert that the body of the http.Response is the same than expected
+func BodyStr(t *testing.T, expected string, body []byte, msg ...any) {
 	t.Helper()
-	require.Contains(t, fetchBody(t, resp), expected)
+
+	if len(msg) == 0 {
+		msg = []any{"expected response body differe"}
+	}
+
+	require.Equal(t, expected, string(body), msg...)
+}
+
+func BodyContains(t *testing.T, expected string, resp *http.Response, msg ...any) {
+	t.Helper()
+
+	if len(msg) == 0 {
+		msg = []any{"expected response body doens't contain the substring"}
+	}
+
+	require.Contains(t, fetchBody(t, resp), expected, msg...)
+}
+
+func BodyContainsStr(t *testing.T, expected string, body []byte, msg ...any) {
+	t.Helper()
+
+	if len(msg) == 0 {
+		msg = []any{"expected response body doens't contain the substring"}
+	}
+
+	require.Contains(t, string(body), expected, msg...)
 }
 
 // BodyDiffere fetch and assert that the body of the http.Response differ than expected
@@ -37,13 +68,18 @@ func BodyDiffere(t *testing.T, expected string, resp *http.Response) {
 	require.NotEqual(t, expected, fetchBody(t, resp))
 }
 
-// StatusCode assert the status code of the response
-func StatusCode(t *testing.T, expected int, resp *http.Response) {
+// StatusCode assert the status code of the response.
+func StatusCode(t *testing.T, expected int, resp *http.Response, msg ...any) {
 	t.Helper()
-	require.Equal(t, expected, resp.StatusCode)
+
+	if len(msg) == 0 {
+		msg = []any{"expected response status code differe"}
+	}
+
+	require.Equal(t, expected, resp.StatusCode, msg...)
 }
 
-// Header assert value of the given header key:vak in the htt.Response param
+// Header assert value of the given header key:vak in the htt.Response param.
 func Header(t *testing.T, key, val string, resp *http.Response) bool {
 	t.Helper()
 	// test existence
@@ -56,7 +92,7 @@ func Header(t *testing.T, key, val string, resp *http.Response) bool {
 	return true
 }
 
-// Header assert value of the given header key:vak in the htt.Response param
+// Headers assert value of the given header key:vak in the htt.Response param.
 func Headers(t *testing.T, resp *http.Response, kv ...[2]string) bool {
 	t.Helper()
 
@@ -67,9 +103,25 @@ func Headers(t *testing.T, resp *http.Response, kv ...[2]string) bool {
 		}
 	}
 
+	// if len(resp.Header) != len()
+
 	return true
 }
 
+// Headers assert value of the given header key:vak in the htt.Response param.
+func HeadersExact(t *testing.T, resp *http.Response, kv ...[2]string) bool {
+	if !Headers(t, resp, kv...) {
+		return false
+	}
+
+	require.Equalf(t, len(kv), len(resp.Header),
+		"headers differs (exp != current): %+v != %+v",
+		kv, resp.Header)
+
+	return true
+}
+
+// DeleteAndTestAPI run a DELETE request before running the test handler.
 func DeleteAndTestAPI(t *testing.T, url string, handler HandlerForTest) {
 	t.Helper()
 
@@ -79,7 +131,7 @@ func DeleteAndTestAPI(t *testing.T, url string, handler HandlerForTest) {
 	handler(t, resp)
 }
 
-// RequestAndTestAPI request an API then run the test handler
+// RequestAndTestAPI request an API then run the test handler.
 func RequestAndTestAPI(t *testing.T, url string, handler HandlerForTest) {
 	t.Helper()
 
@@ -89,7 +141,7 @@ func RequestAndTestAPI(t *testing.T, url string, handler HandlerForTest) {
 	handler(t, resp)
 }
 
-// PushAndTestAPI post to an API then run the test handler
+// PushAndTestAPI post to an API then run the test handler.
 // The sub method try to send an `application/json` encoded content
 func PushAndTestAPI(t *testing.T, path string, content []byte, handler HandlerForTest, headers ...[2]string) {
 	t.Helper()
@@ -100,6 +152,7 @@ func PushAndTestAPI(t *testing.T, path string, content []byte, handler HandlerFo
 	handler(t, resp)
 }
 
+// FetchBody return the response body.
 func FetchBody(t *testing.T, resp *http.Response) string {
 	t.Helper()
 
