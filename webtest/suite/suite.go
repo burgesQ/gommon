@@ -1,7 +1,7 @@
 package webtest
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 
@@ -68,7 +68,7 @@ func Check(t *testing.T, tc TestCaseChecker, resp *http.Response) {
 	t.Helper()
 
 	getB := func() []byte {
-		body, err := ioutil.ReadAll(resp.Body)
+		body, err := io.ReadAll(resp.Body)
 		require.Nil(t, err)
 
 		defer resp.Body.Close()
@@ -77,7 +77,7 @@ func Check(t *testing.T, tc TestCaseChecker, resp *http.Response) {
 		return body
 	}
 
-	t.Logf("\t\t\t\t~~ testing request body code\n")
+	t.Logf("\t\t\t\t~~ testing request body\n")
 	{
 		switch b, bc := tc.GetBody(), tc.GetContains(); {
 		case b != "":
@@ -85,7 +85,7 @@ func Check(t *testing.T, tc TestCaseChecker, resp *http.Response) {
 		case bc != "":
 			webtest.BodyContainsStr(t, bc, getB())
 		default:
-			t.Log("~~ no check run against request body ~~")
+			t.Log("~~ no check run against request ~~")
 		}
 	}
 

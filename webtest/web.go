@@ -4,7 +4,7 @@ package webtest
 import (
 	"bytes"
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 	"time"
@@ -162,7 +162,7 @@ func FetchBody(t *testing.T, resp *http.Response) string {
 func fetchBody(t *testing.T, resp *http.Response) string {
 	t.Helper()
 
-	tmp, err := ioutil.ReadAll(resp.Body)
+	tmp, err := io.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatalf("error fetching the body response : %s", err.Error())
 	}
@@ -176,11 +176,8 @@ func prepReq(t *testing.T, url, method string) *http.Response {
 
 	var (
 		client   = &http.Client{}
-		ctx, cl  = context.WithTimeout(context.Background(), time.Second*_ttlTest)
-		req, err = http.NewRequestWithContext(ctx, method, url, http.NoBody)
+		req, err = http.NewRequest(method, url, http.NoBody)
 	)
-
-	defer cl()
 
 	if err != nil {
 		t.Fatalf("error requesting the api : %s", err.Error())
