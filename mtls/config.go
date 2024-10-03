@@ -28,7 +28,7 @@ func (cfg Config) SameAs(in Config) bool {
 // func (cfg Config) GetLevel() Level { return cfg.Level }
 
 // Empty implemte Config.
-func (cfg Config) Empty() bool { return cfg.Cert == "" && cfg.Key == "" }
+func (cfg Config) Empty() bool { return cfg.Cert == "" && cfg.Key == "" && !cfg.Insecure }
 
 func (cfg Config) AsAttrs() []any {
 	if cfg.Empty() {
