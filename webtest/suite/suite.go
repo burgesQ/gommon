@@ -52,7 +52,7 @@ func Run(t *testing.T, uri string, tc TestCaseRun) {
 			})
 
 	case http.MethodDelete:
-		t.Logf("\t\t\t~~ POST %q %q", uri+path, payload)
+		t.Logf("\t\t\t~~ DELETE %q %q", uri+path, payload)
 		webtest.DeleteAndTestAPI(t, uri+path,
 			func(t *testing.T, resp *http.Response) {
 				t.Helper()
